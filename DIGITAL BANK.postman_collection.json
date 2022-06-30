@@ -1,0 +1,2576 @@
+{
+	"info": {
+		"_postman_id": "ae73735f-b864-4eee-8529-7070a15e9f32",
+		"name": "DIGITAL BANK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create new API-user",
+			"item": [
+				{
+					"name": "01 Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin@demo.io"
+								},
+								{
+									"key": "password",
+									"value": "Demo123!"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02 CreatNewUser (API-USER)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"ssnpart\",_.random(1000, 9999));",
+									"console.log(pm.variables.get('ssnpart'));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"brukernavn\", jsonData.username);",
+									"console.info(\"Nytt brukernavn = \" + jsonData.username);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"Test 123\",\r\n  \"country\": \"United States\",\r\n  \"dob\": \"09/02/1969\",\r\n  \"emailAddress\": \"test{{$randomCountryCode}}@test.com\",\r\n  \"username\": \"test{{$randomCountryCode}}@test.com\",\r\n  \"firstName\": \"Kalle\",\r\n  \"gender\": \"M\",\r\n  \"homePhone\": \"224-624-8286\",\r\n  \"lastName\": \"Kanin\",\r\n  \"locality\": \"Molde\",\r\n  \"mobilePhone\": \"872-380-9420\",\r\n  \"password\": \"Test1234\",\r\n  \"postalCode\": \"6410\",\r\n  \"region\": \"VA\",\r\n  \"ssn\": \"123-45-{{ssnpart}}\",\r\n  \"title\": \"Mr.\",\r\n  \"workPhone\": \"037-370-6915\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user?role=API",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "API"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03 Get authorized NewUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?password=Test1234&username={{brukernavn}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "Test1234"
+								},
+								{
+									"key": "username",
+									"value": "{{brukernavn}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04 Get All Account for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/account",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create new savings account",
+			"item": [
+				{
+					"name": "05 Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?password=Test1234&username={{brukernavn}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "Test1234"
+								},
+								{
+									"key": "username",
+									"value": "{{brukernavn}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "06 Create new savings account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accountName\": \"MIN SPAREKONTO HOS DERE2\",\r\n  \"accountTypeCode\": \"SAV\",\r\n  \"openingDeposit\": 1000,\r\n  \"ownerTypeCode\": \"JNT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/account",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "07 Get All Account for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/account",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create new transaction on savings account",
+			"item": [
+				{
+					"name": "08 Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?password=Test1234&username={{brukernavn}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "Test1234"
+								},
+								{
+									"key": "username",
+									"value": "{{brukernavn}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12 Get All Account for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/account",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "09 Create new transaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 666.00,\r\n  \"description\": \"Online Deposit\",\r\n  \"transactionTypeCode\": \"DPT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/account/389/transaction",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"account",
+								"389",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11 Get all transactions on account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/account/389/transaction",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"account",
+								"389",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10 Create new transaction (withdrawal)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 55.00,\r\n  \"description\": \"Online Withdrawl\",\r\n  \"transactionTypeCode\": \"WTH\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/account/389/transaction",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"account",
+								"389",
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Add role to new user",
+			"item": [
+				{
+					"name": "01 Get authorized ADMIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin@demo.io"
+								},
+								{
+									"key": "password",
+									"value": "Demo123!"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users (all)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/users",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/323",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"323"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user Role for userID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/323/role",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"323",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add user Role for userID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/323/role?role=USER",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"323",
+								"role"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "USER"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user Role for userID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/323/role?role=USER",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"323",
+								"role"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "USER"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user Profile by userID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/323/profile",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"323",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create new API-user from CSV-file",
+			"item": [
+				{
+					"name": "01 Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin@demo.io"
+								},
+								{
+									"key": "password",
+									"value": "Demo123!"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02 CreatNewUser (API-USER)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"ssnpart\",_.random(1000, 9999));",
+									"console.log(pm.variables.get('ssnpart'));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"brukernavn\", jsonData.username);",
+									"console.info(\"Nytt brukernavn = \" + jsonData.username);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"Test 123\",\r\n  \"country\": \"United States\",\r\n  \"dob\": \"09/02/1969\",\r\n  \"emailAddress\": \"test{{$randomCountryCode}}@test.com\",\r\n  \"username\": \"test{{$randomCountryCode}}@test.com\",\r\n  \"firstName\": \"{{firstName}}\",\r\n  \"gender\": \"M\",\r\n  \"homePhone\": \"224-624-8286\",\r\n  \"lastName\": \"{{lastName}}\",\r\n  \"locality\": \"Molde\",\r\n  \"mobilePhone\": \"872-380-9420\",\r\n  \"password\": \"Test1234\",\r\n  \"postalCode\": \"{{postalCode}}\",\r\n  \"region\": \"VA\",\r\n  \"ssn\": \"123-45-{{ssnpart}}\",\r\n  \"title\": \"Mr.\",\r\n  \"workPhone\": \"037-370-6915\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user?role=API",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "API"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create new (WEB-user)",
+			"item": [
+				{
+					"name": "01 Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin@demo.io"
+								},
+								{
+									"key": "password",
+									"value": "Demo123!"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02 CreatNewUser (WEB-USER)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"ssnpart\",_.random(1000, 9999));",
+									"console.log(pm.variables.get('ssnpart'));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"brukernavn\", jsonData.username);",
+									"console.info(\"Nytt brukernavn = \" + jsonData.username);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"Test 123\",\r\n  \"country\": \"United States\",\r\n  \"dob\": \"09/02/1969\",\r\n  \"emailAddress\": \"test{{$randomCountryCode}}@test.com\",\r\n  \"username\": \"test{{$randomCountryCode}}@test.com\",\r\n  \"firstName\": \"Kalle\",\r\n  \"gender\": \"M\",\r\n  \"homePhone\": \"224-624-8286\",\r\n  \"lastName\": \"Kanin\",\r\n  \"locality\": \"Molde\",\r\n  \"mobilePhone\": \"872-380-9420\",\r\n  \"password\": \"Test1234\",\r\n  \"postalCode\": \"6410\",\r\n  \"region\": \"VA\",\r\n  \"ssn\": \"123-45-{{ssnpart}}\",\r\n  \"title\": \"Mr.\",\r\n  \"workPhone\": \"037-370-6915\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user?role=USER",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "USER"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03 Get authorized NewUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?password=Test1234&username={{brukernavn}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "Test1234"
+								},
+								{
+									"key": "username",
+									"value": "{{brukernavn}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04 Get All Account for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/account",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create new savings account (WEB-USER)",
+			"item": [
+				{
+					"name": "05 Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?password=Test1234&username={{brukernavn}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "Test1234"
+								},
+								{
+									"key": "username",
+									"value": "{{brukernavn}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "06 Create new savings account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accountName\": \"MIN SPAREKONTO1123\",\r\n  \"accountTypeCode\": \"SAV\",\r\n  \"openingDeposit\": 123,\r\n  \"ownerTypeCode\": \"JNT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/account",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "07 Get All Account for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/account",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login user and check accounts",
+			"item": [
+				{
+					"name": "Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?password=Demo123!&username=jsmith%40demo.io",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "Demo123!"
+								},
+								{
+									"key": "username",
+									"value": "jsmith%40demo.io"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Account for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/account",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Individual Saving Account for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/account/364",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"account",
+								"364"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get user",
+			"item": [
+				{
+					"name": "Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin@demo.io"
+								},
+								{
+									"key": "password",
+									"value": "Demo123!"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SANDBOX",
+			"item": [
+				{
+					"name": "01 Get authorized ADMIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "admin@demo.io"
+								},
+								{
+									"key": "password",
+									"value": "Demo123!"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?password=Test1234&username=testNF@test.com",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "Test1234"
+								},
+								{
+									"key": "username",
+									"value": "testNF@test.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get authorized Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get authorized JSMITH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/auth?password=Demo123!&username=jsmith@demo.io",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "password",
+									"value": "Demo123!"
+								},
+								{
+									"key": "username",
+									"value": "jsmith@demo.io"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user Role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"var jsonResponse = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"authToken\", jsonResponse.authToken);\r",
+									"//console.info(jsonResponse.authToken)\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user/323/role",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user",
+								"323",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatNewUser (API-USER)_ny Copy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"ssnpart\",_.random(1000, 9999));\r",
+									"console.log(pm.variables.get('ssnpart'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"Test 123\",\r\n  \"country\": \"United States\",\r\n  \"dob\": \"09/02/1969\",\r\n  \"emailAddress\": \"{{$randomEmail}}\",\r\n  \"username\": \"{{$randomEmail}}\",\r\n  \"firstName\": \"Kalle\",\r\n  \"gender\": \"M\",\r\n  \"homePhone\": \"224-624-8286\",\r\n  \"lastName\": \"Kanin\",\r\n  \"locality\": \"Oslo\",\r\n  \"mobilePhone\": \"872-380-9421\",\r\n  \"password\": \"Test1234\",\r\n  \"postalCode\": \"6411\",\r\n  \"region\": \"VA\",\r\n  \"ssn\": \"123-45-{{ssnpart}}\",\r\n  \"title\": \"Mr.\",\r\n  \"workPhone\": \"037-370-6915\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user?role=API",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "API"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatNewUser (WEB-USER)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"Test 123\",\r\n  \"country\": \"United States\",\r\n  \"dob\": \"09/02/1969\",\r\n  \"emailAddress\": \"chetil2@hotmail.com\",\r\n  \"username\": \"chetil2@hotmail.com\",\r\n  \"firstName\": \"Kalle\",\r\n  \"gender\": \"M\",\r\n  \"homePhone\": \"224-624-8286\",\r\n  \"lastName\": \"Kanin\",\r\n  \"locality\": \"Oslo\",\r\n  \"mobilePhone\": \"872-380-9421\",\r\n  \"password\": \"Test1234\",\r\n  \"postalCode\": \"6411\",\r\n  \"region\": \"VA\",\r\n  \"ssn\": \"123-45-7777\",\r\n  \"title\": \"Mr.\",\r\n  \"workPhone\": \"037-370-6915\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user?role=USER",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "USER"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatNewUser (WEB-USER)_ny",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"ssnpart\",_.random(1000, 9999));\r",
+									"console.log(pm.variables.get('ssnpart'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"Test 123\",\r\n  \"country\": \"United States\",\r\n  \"dob\": \"09/02/1969\",\r\n  \"emailAddress\": \"kjetil@test.no\",\r\n  \"username\": \"kjetil@test.no\",\r\n  \"firstName\": \"Kåre\",\r\n  \"gender\": \"M\",\r\n  \"homePhone\": \"224-624-8286\",\r\n  \"lastName\": \"Bob\",\r\n  \"locality\": \"Oslo\",\r\n  \"mobilePhone\": \"872-380-9421\",\r\n  \"password\": \"Test1234\",\r\n  \"postalCode\": \"6411\",\r\n  \"region\": \"VA\",\r\n  \"ssn\": \"123-45-{{ssnpart}}\",\r\n  \"title\": \"Mr.\",\r\n  \"workPhone\": \"037-370-6915\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:8443/bank/api/v1/user?role=USER",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "8443",
+							"path": [
+								"bank",
+								"api",
+								"v1",
+								"user"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "USER"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": ""
+		},
+		{
+			"key": "brukernavn",
+			"value": ""
+		}
+	]
+}
