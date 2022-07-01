@@ -46,7 +46,7 @@
 							}
 						],
 						"url": {
-							"raw": "https://127.0.0.1:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
+							"raw": "https://172.21.0.3:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
 							"protocol": "https",
 							"host": [
 								"127.0.0.1"
