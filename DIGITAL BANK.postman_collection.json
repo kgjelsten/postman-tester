@@ -49,7 +49,7 @@
 							"raw": "https://172.21.0.3:8443/bank/api/v1/auth?username=admin@demo.io&password=Demo123!",
 							"protocol": "https",
 							"host": [
-								"172.21.0.3"
+								"Bank"
 							],
 							"port": "8443",
 							"path": [
