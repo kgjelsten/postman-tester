@@ -123,7 +123,7 @@
 							"raw": "https://localhost:8443/bank/api/v1/user?role=API",
 							"protocol": "https",
 							"host": [
-								"localhost"
+								"Bank"
 							],
 							"port": "8443",
 							"path": [
